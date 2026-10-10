@@ -1,6 +1,11 @@
 from astrbot.api.all import Star, logger, Plain, At, AstrMessageEvent, filter
 
+
 class 补回艾特自身(Star):
+
+    def __init__(self, context):
+        super().__init__(context)
+        self.context = context
 
     @filter.on_waiting_llm_request()
     async def llm队列时(self, event: AstrMessageEvent, *_, **__):
@@ -35,6 +40,15 @@ class 补回艾特自身(Star):
             logger.debug(f"无艾特自身，跳过")
             return
 
+        ctx, atx = next(
+            (
+                (ctx.removeprefix(p), atx.removeprefix(p))
+                for p in self.context.get_config(umo=event.unified_msg_origin).get("wake_prefix", [])
+                if ctx.startswith(p)
+            ),
+            (ctx, atx)
+        )
+
         if ctx not in mstr:
             logger.info(f"重组后文本：|{ctx}|")
             logger.info(f"框架原文本：|{mstr}|")
@@ -46,7 +60,8 @@ class 补回艾特自身(Star):
         event.message_str = mstr
         event.message_obj.message_str = mstr
 
+        logger.debug(f"消息链：|{mxxl}|")
         logger.debug(f"原文本：|{ystr}|")
-        logger.debug(f"喵概要：|{event.get_message_outline()}|")
+        logger.debug(f"概要喵：|{event.get_message_outline()}|")
         logger.debug(f"补全后：|{mstr}|")
         logger.info(f"已补全艾特自身信息：|{mstr}|")
