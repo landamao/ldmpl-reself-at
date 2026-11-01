@@ -25,11 +25,14 @@ class 补回艾特自身(Star):
                 atp.append(i.text)
 
             elif isinstance(i, At):
-                if str(i.qq) == mid:
-                    atp.append(f" @{i.name}(myself) ")
+                qq = str(i.qq)
+                if qq == mid:
+                    atp.append(f" @{i.name}(yourself) ")
+                elif qq == "all":
+                    atp.append(f" @{i.name}({qq}) ")
                 else:
-                    ctp.append(f" @{i.name}({i.qq}) ")
-                    atp.append(f" @{i.name}({i.qq}) ")
+                    ctp.append(f" @{i.name}({qq}) ")
+                    atp.append(f" @{i.name}({qq}) ")
 
             # 其他类型跟随框架，忽略
 
