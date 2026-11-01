@@ -25,7 +25,7 @@ class 补回艾特自身(Star):
                 atp.append(i.text)
 
             elif isinstance(i, At):
-                qq = str(i.qq)
+                qq = str(i.qq or "").strip()
                 if qq == mid:
                     atp.append(f" @{i.name}(yourself) ")
                 elif qq == "all":
